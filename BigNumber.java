@@ -1,4 +1,4 @@
-//Oscar Barbosa Aquino A01329173
+import java.util.ArrayList;
 class BigNumber implements Comparable<BigNumber>{
 	
 	String number;
@@ -6,7 +6,7 @@ class BigNumber implements Comparable<BigNumber>{
 	BigNumber(String s){
 		number=s;
 		if (s.length()>64)
-			throw new InvalidBigNumberException();
+			throw new BigNumberOverflowException();
 		for (int i = 0;i<s.length();i++) {
 			if((int)(s.charAt(i))<48 || (int)(s.charAt(i))>57)
 				throw new InvalidBigNumberException("Contains Non Digits");
@@ -55,8 +55,9 @@ class BigNumber implements Comparable<BigNumber>{
 				carry=1;
 				tSum=tSum%10;
 			}
-			if(tSum>=0)
-				sum=Integer.toString(tSum)+sum;
+			sum=Integer.toString(tSum)+sum;
+			if(i==0 && carry==1)
+				sum=carry+sum;
 		}
 		return new BigNumber(sum);
 	}
@@ -92,6 +93,32 @@ class BigNumber implements Comparable<BigNumber>{
 			sub=Integer.toString(tSub)+sub;
 		}
 		return new BigNumber(sub);	
+	}
+
+	BigNumber mult(BigNumber other){
+		String mult = "";
+		String first ="";
+		String second = "";
+		ArrayList<BigNumber> sums = new ArrayList<BigNumber>();
+		int noSum = 0;
+		int carry=0;
+		if (this.compareTo(other)>=0) {
+			first = number;
+			second=other.str();
+		}
+		else{
+			first = other.str();
+			second = number;
+		}
+		for (int i =second.length()-1;i>=0;i--) {
+			int multiple = intt(Character.toString(second.charAt(i)));
+			for (int i =first.length()-1;i>=0;i--) {
+				int tMult= multiple * intt(Character.toString(second.charAt(i)));
+				String stMult = Integer.toString(tMult);
+
+			}
+		} 
+		return new BigNumber(mult);
 	}
 
 	public int compareTo(BigNumber other){

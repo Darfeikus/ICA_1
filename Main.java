@@ -19,12 +19,16 @@ class Main{
 			BigNumber n = bNumbers.get(0).add(bNumbers.get(1));
 			System.out.println(n);
 			n=bNumbers.get(0).subs(bNumbers.get(1));
+			System.out.println(n);
 		}
 		catch(ArithmeticException e){
 			System.out.println(e);
 		}
 		catch(BigNumberOverflowException x){
 			System.out.println(x);
+		}
+		catch(InvalidBigNumberException z){
+			System.out.println(z);
 		}
 	}
 }
