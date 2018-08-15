@@ -159,7 +159,7 @@ class BigNumber implements Comparable<BigNumber>{
 			throw new ArithmeticException("Not possible division");
 		}
 		else{
-			
+					
 			}
 			System.out.println("El residuo es  " + residue);
 		}

@@ -16,7 +16,7 @@ class Main{
 			}
 		}
 		try{
-			BigNumber n = bNumbers.get(0).div(bNumbers.get(1));
+			BigNumber n = bNumbers.get(0).mult(bNumbers.get(1));
 			System.out.println(n);
 		}
 		catch(ArithmeticException e){
