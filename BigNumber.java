@@ -171,6 +171,7 @@ class BigNumber implements Comparable<BigNumber>{
 				numDiv = new BigNumber(numStr);
 			}
 			current=numStr.length();
+			BigNumber currento = new BigNumber(Integer.toString(current));
 			while(stillDividing){
 				BigNumber e = new BigNumber("1");
 				int timesSubs=0;
@@ -179,14 +180,15 @@ class BigNumber implements Comparable<BigNumber>{
 					timesSubs++;
 				}
 				int decimalPos=0;
-				for (int i = this.length()-1;i>current-1;i--)
+				//i>current-1
+				for (BigNumber i = new BigNumber(Integer.toString(this.length()-1));i.compareNumericValue(currento.subs(e))==1;i=i.subs(e))
 					decimalPos++;
 				quotientStr+=Integer.toString(timesSubs);
 				for (int j=0;j<decimalPos;j++)
 					e=e.mult(new BigNumber("10"));
 				quotient=new BigNumber(quotientStr);
 				residue=this.subs(e.mult(other).mult(quotient));
-				current=intt(residue.str());
+				currento=new BigNumber(residue.str());
 				numDiv=residue;
 				numDivOr=residue;
 				if (residue.compareNumericValue(other)<0){
