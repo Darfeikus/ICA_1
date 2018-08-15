@@ -159,46 +159,7 @@ class BigNumber implements Comparable<BigNumber>{
 			throw new ArithmeticException("Not possible division");
 		}
 		else{
-			int current=0;
-			String quotientStr="";
-			boolean stillDividing=true;
-			BigNumber residue = new BigNumber();
-			BigNumber numDivOr=this;
-			BigNumber numDiv=new BigNumber();
-			String numStr ="";
-			for (int i=current;numDiv.compareNumericValue(other)<0;i++){
-				numStr+=this.str().charAt(i);
-				numDiv = new BigNumber(numStr);
-			}
-			current=numStr.length();
-			BigNumber currento = new BigNumber(Integer.toString(current));
-			while(stillDividing){
-				BigNumber e = new BigNumber("1");
-				int timesSubs=0;
-				while(numDiv.compareNumericValue(other)>=0){
-					numDiv=numDiv.subs(other);
-					timesSubs++;
-				}
-				int decimalPos=0;
-				//i>current-1
-				for (BigNumber i = new BigNumber(Integer.toString(this.length()-1));i.compareNumericValue(currento.subs(e))==1;i=i.subs(e))
-					decimalPos++;
-				quotientStr+=Integer.toString(timesSubs);
-				for (int j=0;j<decimalPos;j++)
-					e=e.mult(new BigNumber("10"));
-				quotient=new BigNumber(quotientStr);
-				residue=this.subs(e.mult(other).mult(quotient));
-				currento=new BigNumber(residue.str());
-				numDiv=residue;
-				numDivOr=residue;
-				if (residue.compareNumericValue(other)<0){
-					stillDividing=false;
-					while(decimalPos!=0){
-						quotientStr+="0";
-						decimalPos--;
-					}
-					quotient=new BigNumber(quotientStr);
-				}
+			
 			}
 			System.out.println("El residuo es  " + residue);
 		}
