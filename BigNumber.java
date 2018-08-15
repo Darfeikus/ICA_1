@@ -160,7 +160,6 @@ class BigNumber implements Comparable<BigNumber>{
 		else
 			while(quotient.compareNumericValue(other)>0){
 				quotient=quotient.subs(other);
-				System.out.println(quotient);
 				times=times.add(new BigNumber("1"));
 			}
 		return times;
