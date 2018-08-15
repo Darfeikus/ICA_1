@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 class BigNumber implements Comparable<BigNumber>{
 	
 	String number;
@@ -67,7 +67,7 @@ class BigNumber implements Comparable<BigNumber>{
 		String first ="";
 		String second = "";
 		int extraSub=0;
-		if (this.compareTo(other)>=0) {
+		if (this.compareNumericValue(other)>=0) {
 			second=other.str();
 			int dif = this.compareTo(other);
 			for (int i = 0;i<dif;i++)
@@ -78,11 +78,14 @@ class BigNumber implements Comparable<BigNumber>{
 			throw new ArithmeticException("Not posible to substract");
 		}
 		for (int i = first.length()-1;i>=0;i--) {
-			int upDigit=intt(Character.toString(first.charAt(i)));
-			int downDigit=intt(Character.toString(second.charAt(i)))-extraSub;
+			int upDigit=intt(Character.toString(first.charAt(i)))-extraSub;
+			int downDigit=intt(Character.toString(second.charAt(i)));
 			int tSub=0;
 			if (upDigit<downDigit) {
-				upDigit=9;
+				if(upDigit==-1)
+					upDigit=9;
+				else
+					upDigit=10;
 				tSub = upDigit-downDigit;
 				extraSub=1;
 			}
@@ -90,8 +93,13 @@ class BigNumber implements Comparable<BigNumber>{
 				tSub = upDigit-downDigit;
 				extraSub=0;	
 			}
-			sub=Integer.toString(tSub)+sub;
+			if (i==0 && tSub==0) {
+				sub=sub;
+			}
+			else
+				sub=Integer.toString(tSub)+sub;
 		}
+		
 		return new BigNumber(sub);	
 	}
 
@@ -111,14 +119,51 @@ class BigNumber implements Comparable<BigNumber>{
 			second = number;
 		}
 		for (int i =second.length()-1;i>=0;i--) {
+			String tempBN="";
+			carry=0;
+			for (int k = 0;k<noSum;k++)
+				tempBN+="0";
 			int multiple = intt(Character.toString(second.charAt(i)));
-			for (int i =first.length()-1;i>=0;i--) {
-				int tMult= multiple * intt(Character.toString(second.charAt(i)));
+			for (int j =first.length()-1;j>=0;j--) {
+				int tMult= multiple * intt(Character.toString(first.charAt(j))) + carry;
 				String stMult = Integer.toString(tMult);
-
+				if (tMult>9) {
+					carry=intt(Character.toString(stMult.charAt(0)));
+					stMult=Character.toString(stMult.charAt(1));
+				}
+				else{
+					carry=0;
+					stMult=Character.toString(stMult.charAt(0));
+				}
+				tempBN=stMult+tempBN;
+				if(j==0 && carry>0)
+					tempBN=carry+tempBN;					
 			}
-		} 
-		return new BigNumber(mult);
+			sums.add(new BigNumber(tempBN));
+			noSum++;
+		}
+		BigNumber totalSum = new BigNumber();
+		for (int i = 0;i<sums.size();i++) {
+			totalSum=sums.get(i).add(totalSum);
+		}
+
+		return totalSum;
+	}
+
+	BigNumber div(BigNumber other){
+		BigNumber times = new BigNumber("1");
+		BigNumber quotient = this;
+		if (this.compareNumericValue(other)==0)
+			times=new BigNumber("1");
+		else if(this.compareNumericValue(other)==-1)
+			throw new ArithmeticException("Not possible division");
+		else
+			while(quotient.compareNumericValue(other)>0){
+				quotient=quotient.subs(other);
+				System.out.println(quotient);
+				times=times.add(new BigNumber("1"));
+			}
+		return times;
 	}
 
 	public int compareTo(BigNumber other){
@@ -128,6 +173,34 @@ class BigNumber implements Comparable<BigNumber>{
 			return number.length()-other.length();
 		else
 			return number.length()-other.length();
+	}
+
+	public int compareNumericValue(BigNumber other){
+		boolean equals=true;
+		String first ="";
+		String second = "";
+		if (this.compareTo(other)>=0) {
+			second=other.str();
+			int dif = this.compareTo(other);
+			for (int i = 0;i<dif;i++)
+				second="0"+second;
+			first = number;
+		}
+		else{
+			second=this.str();
+			int dif = other.compareTo(this);
+			for (int i = 0;i<dif;i++)
+				second="0"+second;	
+			first = other.str();
+		}
+		for (int i =0;i<first.length();i++) {
+			if (intt(Character.toString(first.charAt(i)))>intt(Character.toString(second.charAt(i))))
+				return 1;
+			else if (intt(Character.toString(first.charAt(i)))<intt(Character.toString(second.charAt(i))))
+				return -1;
+		}
+		return 0;
+
 	}
 
 	public String toString(){
