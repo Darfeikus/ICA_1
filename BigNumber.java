@@ -9,7 +9,7 @@ class BigNumber implements Comparable<BigNumber>{
 			throw new BigNumberOverflowException();
 		for (int i = 0;i<s.length();i++) {
 			if((int)(s.charAt(i))<48 || (int)(s.charAt(i))>57)
-				throw new InvalidBigNumberException("Contains Non Digits");
+				throw new InvalidBigNumberException();
 		}	
 	}
 
@@ -75,8 +75,9 @@ class BigNumber implements Comparable<BigNumber>{
 			first = number;
 		}
 		else{
-			throw new ArithmeticException("Not posible to substract");
+			throw new ArithmeticException();
 		}
+
 		for (int i = first.length()-1;i>=0;i--) {
 			int upDigit=intt(Character.toString(first.charAt(i)))-extraSub;
 			int downDigit=intt(Character.toString(second.charAt(i)));
@@ -99,7 +100,9 @@ class BigNumber implements Comparable<BigNumber>{
 			else
 				sub=Integer.toString(tSub)+sub;
 		}
-		if (String.valueOf(sub.charAt(0)).equals("0"))
+		if (sub.equals(""))
+			sub="0";
+		if (String.valueOf(sub.charAt(0)).equals("0") && sub.length()>1)
 			sub=sub.substring(1);
 		return new BigNumber(sub);	
 	}
@@ -153,11 +156,10 @@ class BigNumber implements Comparable<BigNumber>{
 
 	BigNumber div(BigNumber other){
 		BigNumber quotient = null;
-		if (this.compareNumericValue(other)==0)
-			quotient=new BigNumber("1");
-		else if(this.compareNumericValue(other)==-1){
+		if(this.compareNumericValue(other)==-1 || other.str().equals("0"))
 			throw new ArithmeticException("Not possible division");
-		}
+		else if (this.compareNumericValue(other)==0)
+			quotient=new BigNumber("1");
 		else{
 			int current=0;
 			String quotientStr="";
@@ -167,8 +169,11 @@ class BigNumber implements Comparable<BigNumber>{
 			boolean firstTry=true;
 			int currentTemp = 0;
 			int pastDec=0;
-			BigNumber numDivOr=this;			
+			boolean secondTry=true;
+			BigNumber numDivOr=this;
 			while(stillDividing){
+				//if (firstTry==false || secondTry==true)
+				//	numDivOr=new BigNumber("0"+numDivOr.str());
 				BigNumber e = new BigNumber("1");
 				String numStr ="";
 				int lastDec=0;
@@ -195,12 +200,16 @@ class BigNumber implements Comparable<BigNumber>{
 					lastDec++;
 				for (int j=0;j<lastDec;j++)
 					e=e.mult(new BigNumber("10"));
+				//hir
 				residue=this.subs(e.mult(other).mult(quotient));
 				numDivOr=residue;
 				pastDec=current;
 				firstTry=false;
-				if (residue.compareNumericValue(other)<0)
+				if (residue.compareNumericValue(other)<0 || lastDec==0){
 					stillDividing=false;
+					if (residue.compareNumericValue(new BigNumber())==0 || residue.compareNumericValue(new BigNumber())==1)
+						quotient=quotient.mult(e);
+				}
 			}
 		}
 		return quotient;
