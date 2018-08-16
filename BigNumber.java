@@ -77,7 +77,6 @@ class BigNumber implements Comparable<BigNumber>{
 		else{
 			throw new ArithmeticException("Not posible to substract");
 		}
-
 		for (int i = first.length()-1;i>=0;i--) {
 			int upDigit=intt(Character.toString(first.charAt(i)))-extraSub;
 			int downDigit=intt(Character.toString(second.charAt(i)));
@@ -100,7 +99,8 @@ class BigNumber implements Comparable<BigNumber>{
 			else
 				sub=Integer.toString(tSub)+sub;
 		}
-		
+		if (String.valueOf(sub.charAt(0)).equals("0"))
+			sub=sub.substring(1);
 		return new BigNumber(sub);	
 	}
 
@@ -159,11 +159,60 @@ class BigNumber implements Comparable<BigNumber>{
 			throw new ArithmeticException("Not possible division");
 		}
 		else{
-					
+			int current=0;
+			String quotientStr="";
+			boolean stillDividing=true;
+			BigNumber residue = new BigNumber();
+			BigNumber currento = new BigNumber();
+			boolean firstTry=true;
+			int currentTemp = 0;
+			int pastDec=0;
+			BigNumber numDivOr=this;			
+			while(stillDividing){
+				BigNumber e = new BigNumber("1");
+				String numStr ="";
+				int lastDec=0;
+				int timesSubs=0;
+				BigNumber numDiv=new BigNumber();
+				current=0;
+				for (int i =0;this.length()-numDivOr.length()>0;i++ )
+					numDivOr=new BigNumber("0"+numDivOr.str());
+				for (int i=0;numDiv.compareNumericValue(other)<0;i++){
+					numStr+=numDivOr.str().charAt(i);
+					numDiv = new BigNumber(numStr);
+					current++;
+				}
+				while(numDiv.compareNumericValue(other)>=0){
+					numDiv=numDiv.subs(other);
+					timesSubs++;
+				}
+				if (current-pastDec>1)
+					if (firstTry==false)
+						quotientStr+="0";
+				quotientStr+=Integer.toString(timesSubs);
+				quotient=new BigNumber(quotientStr);
+				for (int i = this.length()-1;i>=current;i--)
+					lastDec++;
+				for (int j=0;j<lastDec;j++)
+					e=e.mult(new BigNumber("10"));
+				residue=this.subs(e.mult(other).mult(quotient));
+				numDivOr=residue;
+				pastDec=current;
+				firstTry=false;
+				if (residue.compareNumericValue(other)<0)
+					stillDividing=false;
 			}
-			System.out.println("El residuo es  " + residue);
 		}
 		return quotient;
+	}
+
+	BigNumber mod(BigNumber other){
+		BigNumber residue = this.subs(this.div(other).mult(other));
+		int zeros=0;
+		for (int i = 0;i<residue.length()-1;i++)
+			if (Character.toString(residue.str().charAt(i)).equals("0"))
+				zeros++;
+		return new BigNumber(residue.str().substring(zeros));
 	}
 
 	public int compareTo(BigNumber other){
