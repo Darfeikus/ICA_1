@@ -1,1 +1,59 @@
 ICA_1
+In-Class Assignment
+
+Write a program in Java to implement a very large number ADT (BigNumber)
+
+The BigNumber ADT has to implement the following restrictions: 
+
+* Store a maximum of 64 digits
+* Only non-negative numbers are allowed
+* implement addition
+* implement substraction
+* implement Multiplication
+* implement division and remainder / Modulo (Integer Operations)
+* implement the Comparable (java) Interface
+* validate the constructor (throw an exception)            InvalidBigNumberException
+* validate the division by 0 (throw an exception)         ArithmeticException 
+* validate the overflow (throw an exception)             BigNUmberOverflowException
+
+
+Write a test class (Main) that: 
+
+(tryes to) instantiate 7 BigNumber objects
+
+    bn1 = 1234567890123456789012345678901234567890;
+    bn2 = 5678990567890567890567890567890567890567890567890;
+    bn3 = 38473847874728740283748237408237428347128347082134700;
+    bn4 = 42893740482574097583475382;
+    bn5 = 0;
+    bn6 = 3847384787472874028374823740823742834712834708213470038473847874728740283748237408237428347128347082134700; 
+    bn7 = 82837589245u897;
+
+    each one has to be enclosed in a try-catch block
+    (the constructor receives a String)
+
+and (tryes to) do the following operations :
+
+    bn3 * bn1                         (overflow)
+
+    bn2 + bn3                          (show the result)
+
+    bn4 / bn5                          (catch the aritmetic exception)
+
+    bn3 - bn1                         (show the result)
+
+    bn1 - bn3                         (catch the exception)
+
+    bn3 / bn4                         (show the result)
+
+    bn3 % bn1                         (show the result)
+
+    bn4 * bn4                         (show the result)
+
+
+You can work in pairs
+Follow the danperez homework rules 
+Follow the coding conventions
+
+Due date 
+Aug 21, 08:21 hrs

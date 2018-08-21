@@ -1,7 +1,18 @@
+/*
+	ICA_1
+	Oscar Barbosa Aquino A01329173
+	Antonio Diaz Flores A01329256
+*/
+
 import java.util.*;
+
+/*Class BigNumber that implements Comparable*/
+
 class BigNumber implements Comparable<BigNumber>{
 	
 	String number;
+
+	/*Constructor with string*/
 
 	BigNumber(String s){
 		number=s;
@@ -13,21 +24,31 @@ class BigNumber implements Comparable<BigNumber>{
 		}	
 	}
 
+	/*Default Constructor*/
+
 	BigNumber(){
 		number="0";
 	}
+
+	/*Method that returns the length of the BigNumber*/
 
 	int length(){
 		return number.length();
 	}
 
+	/*Method that returns the BigNumber as a String*/
+
 	String str(){
 		return number;
 	}
 
+	/*Method for parsing Integers*/
+
 	int intt(String s){
 		return Integer.parseInt(s);
 	}
+
+	/*Method that sums two BigNumbers*/
 
 	BigNumber add(BigNumber other){
 		String sum = "";
@@ -61,6 +82,8 @@ class BigNumber implements Comparable<BigNumber>{
 		}
 		return new BigNumber(sum);
 	}
+
+	/*Method that substracts BigNumbers*/
 
 	BigNumber subs(BigNumber other){
 		String sub = "";
@@ -106,6 +129,8 @@ class BigNumber implements Comparable<BigNumber>{
 			sub=sub.substring(1);
 		return new BigNumber(sub);	
 	}
+
+	/*Method that multiplies BigNumbers*/
 
 	BigNumber mult(BigNumber other){
 		String mult = "";
@@ -154,6 +179,8 @@ class BigNumber implements Comparable<BigNumber>{
 		return totalSum;
 	}
 
+	/*Method that divides BigNumbers*/
+
 	BigNumber div(BigNumber other){
 		BigNumber quotient = null;
 		if(this.compareNumericValue(other)==-1 || other.str().equals("0"))
@@ -165,15 +192,10 @@ class BigNumber implements Comparable<BigNumber>{
 			String quotientStr="";
 			boolean stillDividing=true;
 			BigNumber residue = new BigNumber();
-			BigNumber currento = new BigNumber();
 			boolean firstTry=true;
-			int currentTemp = 0;
 			int pastDec=0;
-			boolean secondTry=true;
 			BigNumber numDivOr=this;
 			while(stillDividing){
-				//if (firstTry==false || secondTry==true)
-				//	numDivOr=new BigNumber("0"+numDivOr.str());
 				BigNumber e = new BigNumber("1");
 				String numStr ="";
 				int lastDec=0;
@@ -194,70 +216,69 @@ class BigNumber implements Comparable<BigNumber>{
 				if (current-pastDec>1)
 					if (firstTry==false)
 						quotientStr+="0";
-				quotientStr+=Integer.toString(timesSubs);
-				quotient=new BigNumber(quotientStr);
-				for (int i = this.length()-1;i>=current;i--)
-					lastDec++;
-				for (int j=0;j<lastDec;j++)
-					e=e.mult(new BigNumber("10"));
-				//hir
-				residue=this.subs(e.mult(other).mult(quotient));
-				numDivOr=residue;
-				pastDec=current;
-				firstTry=false;
-				if (residue.compareNumericValue(other)<0 || lastDec==0){
-					stillDividing=false;
-					if (residue.compareNumericValue(new BigNumber())==0 || residue.compareNumericValue(new BigNumber())==1)
-						quotient=quotient.mult(e);
+					quotientStr+=Integer.toString(timesSubs);
+					quotient=new BigNumber(quotientStr);
+					for (int i = this.length()-1;i>=current;i--)
+						lastDec++;
+					for (int j=0;j<lastDec;j++)
+						e=e.mult(new BigNumber("10"));
+					residue=this.subs(e.mult(other).mult(quotient));
+					numDivOr=residue;
+					pastDec=current;
+					firstTry=false;
+					if (residue.compareNumericValue(other)<0 || lastDec==0){
+						stillDividing=false;
+						if (residue.compareNumericValue(new BigNumber())==0 || residue.compareNumericValue(new BigNumber())==1)
+							quotient=quotient.mult(e);
+					}
 				}
 			}
+			return quotient;
 		}
-		return quotient;
-	}
 
-	BigNumber mod(BigNumber other){
-		BigNumber residue = this.subs(this.div(other).mult(other));
-		int zeros=0;
-		for (int i = 0;i<residue.length()-1;i++)
-			if (Character.toString(residue.str().charAt(i)).equals("0"))
-				zeros++;
-		return new BigNumber(residue.str().substring(zeros));
-	}
+		BigNumber mod(BigNumber other){
+			BigNumber residue = this.subs(this.div(other).mult(other));
+			int zeros=0;
+			for (int i = 0;i<residue.length()-1;i++)
+				if (Character.toString(residue.str().charAt(i)).equals("0"))
+					zeros++;
+				return new BigNumber(residue.str().substring(zeros));
+			}
 
-	public int compareTo(BigNumber other){
-		if (number.length()==other.length())
-			return 0;
-		else if (number.length()>other.length())
-			return number.length()-other.length();
-		else
-			return number.length()-other.length();
-	}
+			public int compareTo(BigNumber other){
+				if (number.length()==other.length())
+					return 0;
+				else if (number.length()>other.length())
+					return number.length()-other.length();
+				else
+					return number.length()-other.length();
+			}
 
-	public int compareNumericValue(BigNumber other){
-		boolean equals=true;
-		String first =this.str();
-		String second =other.str();
-		if (this.compareTo(other)>=0) {
-			int dif = this.compareTo(other);
-			for (int i = 0;i<dif;i++)
-				second="0"+second;
+			public int compareNumericValue(BigNumber other){
+				boolean equals=true;
+				String first =this.str();
+				String second =other.str();
+				if (this.compareTo(other)>=0) {
+					int dif = this.compareTo(other);
+					for (int i = 0;i<dif;i++)
+						second="0"+second;
+				}
+				else{
+					int dif = other.compareTo(this);
+					for (int i = 0;i<dif;i++)
+						first="0"+first;	
+				}
+				for (int i =0;i<first.length();i++) {
+					if (intt(Character.toString(first.charAt(i)))>intt(Character.toString(second.charAt(i))))
+						return 1;
+					else if (intt(Character.toString(first.charAt(i)))<intt(Character.toString(second.charAt(i))))
+						return -1;
+				}
+				return 0;
+
+			}
+
+			public String toString(){
+				return number;
+			}
 		}
-		else{
-			int dif = other.compareTo(this);
-			for (int i = 0;i<dif;i++)
-				first="0"+first;	
-		}
-		for (int i =0;i<first.length();i++) {
-			if (intt(Character.toString(first.charAt(i)))>intt(Character.toString(second.charAt(i))))
-				return 1;
-			else if (intt(Character.toString(first.charAt(i)))<intt(Character.toString(second.charAt(i))))
-				return -1;
-		}
-		return 0;
-
-	}
-
-	public String toString(){
-		return number;
-	}
-}
