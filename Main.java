@@ -42,12 +42,12 @@ class Main{
 				bNumbers.add(myNumber);
 			}
 			catch(InvalidBigNumberException e){
-				System.out.println("Error in : " + temp);
+				System.out.println("Error in : " + temp + "\n\n");
 				System.out.println(e);
 				bNumbers.add(new BigNumber());
 			}
 			catch(BigNumberOverflowException x){
-				System.out.println("Error in : " + temp);
+				System.out.println("Error in : " + temp + "\n\n");
 				System.out.println(x);
 				bNumbers.add(new BigNumber());
 			}
@@ -60,7 +60,6 @@ class Main{
 		instructions.add("344");
 		instructions.add("351");
 		instructions.add("434");
-		System.out.println("\n\nOperations : \n\n");
 		for (int i = 0;i<instructions.size();i++) {
 			try{
 				String insActual = instructions.get(i);
